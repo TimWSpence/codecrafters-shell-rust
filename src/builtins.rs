@@ -85,7 +85,7 @@ impl Handler for CdHandler {
         match meta {
             Ok(_) => env::set_current_dir(path),
             Err(_) => {
-                eprintln!("cd: {}: No ush file or directory", path);
+                eprintln!("cd: {}: No such file or directory", path);
                 Ok(())
             }
         }?;
