@@ -1,7 +1,6 @@
+use anyhow::*;
 #[allow(unused_imports)]
 use std::io::{self, Write};
-
-use anyhow::*;
 
 fn main() -> Result<()> {
     print!("$ ");
@@ -9,12 +8,12 @@ fn main() -> Result<()> {
 
     // Wait for user input
     let stdin = io::stdin();
-    let mut input = String::new();
-    stdin.read_line(&mut input)?;
+    loop {
+        let mut input = String::new();
+        stdin.read_line(&mut input)?;
 
-    if let Some(cmd) = input.split_whitespace().next() {
-        println!("{cmd}: command not found")
+        if let Some(cmd) = input.split_whitespace().next() {
+            println!("{cmd}: command not found")
+        }
     }
-
-    Ok(())
 }
