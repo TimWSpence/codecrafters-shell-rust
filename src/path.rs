@@ -3,7 +3,7 @@ use core::result::Result::Ok;
 use std::{
     env,
     fs::{self},
-    path::{Path, PathBuf},
+    path::PathBuf,
 };
 
 fn path() -> Result<Vec<String>> {
