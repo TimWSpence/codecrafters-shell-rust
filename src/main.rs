@@ -19,7 +19,7 @@ fn main() -> Result<()> {
         if let Some(cmd) = iter.next() {
             let args: Vec<&str> = iter.collect();
 
-            if let Some(_res_) = builtins::handle(cmd, args)? {
+            if let Some(_res_) = builtins::handle(cmd, args) {
             } else {
                 println!("{cmd}: command not found")
             }

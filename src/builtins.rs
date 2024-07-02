@@ -1,12 +1,16 @@
 use anyhow::*;
 
-pub fn handle(cmd: &str, args: Vec<&str>) -> Result<Option<()>> {
+pub fn handle(cmd: &str, args: Vec<&str>) -> Option<Result<()>> {
     match cmd {
         "exit" => {
             let code = args.first().unwrap_or(&"1");
-            let code = code.parse()?;
+            let code = code.parse().unwrap();
             std::process::exit(code);
         }
-        _ => Ok(None),
+        "echo" => {
+            println!("{}", args.join(" "));
+            Some(Ok(()))
+        }
+        _ => None,
     }
 }
