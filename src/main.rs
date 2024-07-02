@@ -17,9 +17,9 @@ fn main() -> Result<()> {
 
         let mut iter = input.split_whitespace();
         if let Some(cmd) = iter.next() {
-            let args: Vec<&str> = iter.collect();
-
-            if let Some(_res_) = builtins::handle(cmd, args) {
+            if let Some(handler) = builtins::dispatch(cmd) {
+                let args: Vec<&str> = iter.collect();
+                handler.handle(args)?;
             } else {
                 println!("{cmd}: command not found")
             }
