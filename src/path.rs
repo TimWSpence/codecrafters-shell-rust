@@ -17,6 +17,7 @@ pub fn search(cmd: &str) -> Result<Option<PathBuf>> {
     let mut res: Option<PathBuf> = None;
     for p in path {
         let fs = fs::read_dir(p);
+        // Don't fail if entry in PATH is not valid
         if let Ok(fs) = fs {
             for f in fs.flatten() {
                 if let Ok(t) = f.file_type() {
