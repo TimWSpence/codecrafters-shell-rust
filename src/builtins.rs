@@ -80,8 +80,14 @@ struct CdHandler {}
 impl Handler for CdHandler {
     fn handle(&self, args: Vec<&str>) -> Result<()> {
         //TODO: cd to ~ if no argument supplied
-        let path = args.first().unwrap();
-        let meta = fs::metadata(path);
+        let mut path: String = args.first().unwrap_or(&"~").to_string();
+        if path.starts_with('~') {
+            let home = env::var("HOME")?;
+            let trimmed = path.strip_prefix('~').unwrap();
+            let trimmed = trimmed.strip_prefix('/').unwrap_or(trimmed);
+            path = format!("{}/{}", home, trimmed);
+        }
+        let meta = fs::metadata(&path);
         match meta {
             Ok(_) => env::set_current_dir(path),
             Err(_) => {
