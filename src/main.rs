@@ -2,6 +2,8 @@ use anyhow::*;
 #[allow(unused_imports)]
 use std::io::{self, Write};
 
+mod builtins;
+
 fn main() -> Result<()> {
     // Wait for user input
     let stdin = io::stdin();
@@ -13,8 +15,14 @@ fn main() -> Result<()> {
 
         stdin.read_line(&mut input)?;
 
-        if let Some(cmd) = input.split_whitespace().next() {
-            println!("{cmd}: command not found")
+        let mut iter = input.split_whitespace();
+        if let Some(cmd) = iter.next() {
+            let args: Vec<&str> = iter.collect();
+
+            if let Some(_res_) = builtins::handle(cmd, args)? {
+            } else {
+                println!("{cmd}: command not found")
+            }
         }
     }
 }
