@@ -1,4 +1,5 @@
-use std::env;
+use core::result::Result::Ok;
+use std::{env, fs};
 
 use anyhow::*;
 
@@ -80,7 +81,14 @@ impl Handler for CdHandler {
     fn handle(&self, args: Vec<&str>) -> Result<()> {
         //TODO: cd to ~ if no argument supplied
         let path = args.first().unwrap();
-        env::set_current_dir(path)?;
+        let meta = fs::metadata(path);
+        match meta {
+            Ok(_) => env::set_current_dir(path),
+            Err(_) => {
+                eprintln!("cd: {}: No ush file or directory", path);
+                Ok(())
+            }
+        }?;
         Ok(())
     }
 }
