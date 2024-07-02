@@ -3,6 +3,7 @@ use anyhow::*;
 use std::io::{self, Write};
 
 mod builtins;
+mod path;
 
 fn main() -> Result<()> {
     // Wait for user input

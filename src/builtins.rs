@@ -1,5 +1,7 @@
 use anyhow::*;
 
+use crate::path;
+
 pub fn dispatch(cmd: &str) -> Option<Box<dyn Handler>> {
     match cmd {
         "exit" => Some(Box::new(ExitHandler {})),
@@ -39,8 +41,10 @@ impl Handler for TypeHandler {
         if args.len() == 1 {
             let cmd = args.first().unwrap();
             let tpe = match dispatch(cmd) {
-                Some(_) => Some("is a shell builtin"),
-                None => None,
+                Some(_) => Some("is a shell builtin".to_owned()),
+                None => {
+                    path::search(cmd)?.map(|p| format!("is {}", p.to_str().unwrap().to_owned()))
+                }
             };
 
             if let Some(tpe) = tpe {
