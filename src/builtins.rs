@@ -1,3 +1,5 @@
+use std::env;
+
 use anyhow::*;
 
 use crate::path;
@@ -7,6 +9,7 @@ pub fn dispatch(cmd: &str) -> Option<Box<dyn Handler>> {
         "exit" => Some(Box::new(ExitHandler {})),
         "echo" => Some(Box::new(EchoHandler {})),
         "type" => Some(Box::new(TypeHandler {})),
+        "pwd" => Some(Box::new(PwdHandler {})),
         _ => None,
     }
 }
@@ -58,5 +61,14 @@ impl Handler for TypeHandler {
             eprintln!("No argument provided for `type`");
             Ok(())
         }
+    }
+}
+struct PwdHandler {}
+
+impl Handler for PwdHandler {
+    fn handle(&self, _args: Vec<&str>) -> Result<()> {
+        let cwd = env::current_dir()?;
+        println!("{}", cwd.to_str().unwrap());
+        Ok(())
     }
 }
