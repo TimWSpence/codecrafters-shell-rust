@@ -3,6 +3,7 @@ use anyhow::*;
 use std::io::{self, Write};
 
 mod builtins;
+mod fork;
 mod path;
 
 fn main() -> Result<()> {
@@ -21,6 +22,9 @@ fn main() -> Result<()> {
             if let Some(handler) = builtins::dispatch(cmd) {
                 let args: Vec<&str> = iter.collect();
                 handler.handle(args)?;
+            } else if let Some(cmd) = path::search(cmd)? {
+                let args: Vec<&str> = iter.collect();
+                fork::fork(cmd.to_str().unwrap(), args)?;
             } else {
                 println!("{cmd}: command not found")
             }
