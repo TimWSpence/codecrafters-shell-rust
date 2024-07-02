@@ -10,6 +10,7 @@ pub fn dispatch(cmd: &str) -> Option<Box<dyn Handler>> {
         "echo" => Some(Box::new(EchoHandler {})),
         "type" => Some(Box::new(TypeHandler {})),
         "pwd" => Some(Box::new(PwdHandler {})),
+        "cd" => Some(Box::new(CdHandler {})),
         _ => None,
     }
 }
@@ -69,6 +70,17 @@ impl Handler for PwdHandler {
     fn handle(&self, _args: Vec<&str>) -> Result<()> {
         let cwd = env::current_dir()?;
         println!("{}", cwd.to_str().unwrap());
+        Ok(())
+    }
+}
+
+struct CdHandler {}
+
+impl Handler for CdHandler {
+    fn handle(&self, args: Vec<&str>) -> Result<()> {
+        //TODO: cd to ~ if no argument supplied
+        let path = args.first().unwrap();
+        env::set_current_dir(path)?;
         Ok(())
     }
 }
